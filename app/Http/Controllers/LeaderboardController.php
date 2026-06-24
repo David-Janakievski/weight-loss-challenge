@@ -9,7 +9,7 @@ class LeaderboardController extends Controller
 {
     public function index()
     {
-        $users = User::where('onboarding_completed', true)->get();
+        $users = User::where('onboarding_completed', true)->where('is_admin', false)->get();
 
         $ranked = $users->sortByDesc(fn ($u) => [$u->weightLost(), $u->percentLost()])->values();
 
