@@ -1,0 +1,31 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('users', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('username')->unique();
+            $table->string('password');
+            $table->boolean('is_admin')->default(false);
+            $table->boolean('must_change_password')->default(true);
+            $table->boolean('onboarding_completed')->default(false);
+            $table->decimal('starting_weight', 6, 2)->nullable();
+            $table->string('starting_photo')->nullable();
+            $table->string('goal_note')->nullable();
+            $table->rememberToken();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('users');
+    }
+};
