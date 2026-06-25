@@ -13,8 +13,13 @@ class LeaderboardController extends Controller
 
         $ranked = $users->sortByDesc(fn ($u) => [$u->weightLost(), $u->percentLost()])->values();
 
+        $isEnded = Challenge::isEnded();
+        $winner = $isEnded ? $ranked->first() : null;
+        $loser = $isEnded ? $ranked->last() : null;
+
         $weekNumber = Challenge::currentWeekNumber();
         $biggestLoserOfWeek = User::where('onboarding_completed', true)
+            ->where('is_admin', false)
             ->get()
             ->map(function ($u) use ($weekNumber) {
                 $checkin = $u->checkins->firstWhere('week_number', $weekNumber);
@@ -30,6 +35,9 @@ class LeaderboardController extends Controller
         return view('leaderboard.index', [
             'ranked' => $ranked,
             'biggestLoserOfWeek' => $biggestLoserOfWeek,
+            'isEnded' => $isEnded,
+            'winner' => $winner,
+            'loser' => $loser,
         ]);
     }
 }

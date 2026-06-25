@@ -42,6 +42,11 @@ class Challenge
         return (int) floor($firstTuesday->diffInWeeks($date)) + 1;
     }
 
+    public static function isEnded(): bool
+    {
+        return now()->gt(self::endDate()->endOfDay());
+    }
+
     public static function daysRemaining(): int
     {
         $days = now()->startOfDay()->diffInDays(self::endDate()->endOfDay(), false);
