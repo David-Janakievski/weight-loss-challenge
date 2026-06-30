@@ -3,14 +3,16 @@
 @section('content')
 
 @if($showReminder)
-<div id="reminderBanner" class="fade-in mb-6 rounded-2xl border-2 border-gold bg-gold/10 p-5 flex items-center justify-between gap-4">
-    <div>
-        <p class="font-bold text-gold text-lg">📅 Потсетник за неделно пријавување</p>
-        <p class="text-sm text-gray-200">Денес е вторник — време е да внесеш напредок за оваа недела. Прикачи тежина и фотографија на прогрес.</p>
-    </div>
-    <div class="flex items-center gap-3 shrink-0">
-        <a href="{{ route('checkin.create') }}" class="btn btn-gold whitespace-nowrap">Прикачи неделно пријавување</a>
-        <button onclick="document.getElementById('reminderBanner').remove()" class="text-gray-400 hover:text-white text-xl leading-none">&times;</button>
+<div id="reminderBanner" class="fade-in mb-6 rounded-2xl border-2 border-gold bg-gold/10 p-4 sm:p-5">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <p class="font-bold text-gold text-lg">📅 Потсетник за неделно пријавување</p>
+            <p class="text-sm text-gray-200 mt-1">Денес е вторник — време е да внесеш напредок за оваа недела. Прикачи тежина и фотографија на прогрес.</p>
+        </div>
+        <div class="flex items-center gap-3 shrink-0">
+            <a href="{{ route('checkin.create') }}" class="btn btn-gold whitespace-nowrap text-sm">Прикачи пријавување</a>
+            <button onclick="document.getElementById('reminderBanner').remove()" class="text-gray-400 hover:text-white text-2xl leading-none">&times;</button>
+        </div>
     </div>
 </div>
 @elseif($weekNumber > 0)
@@ -19,28 +21,29 @@
 </div>
 @endif
 
-<div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-    <div class="card p-5">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6 md:mb-8">
+    <div class="card p-4 sm:p-5">
         <p class="text-gray-400 text-xs uppercase">Почетна тежина</p>
-        <p class="text-2xl font-bold mt-1">{{ number_format($user->starting_weight, 1) }} кг</p>
+        <p class="text-xl sm:text-2xl font-bold mt-1">{{ number_format($user->starting_weight, 1) }} кг</p>
     </div>
-    <div class="card p-5">
+    <div class="card p-4 sm:p-5">
         <p class="text-gray-400 text-xs uppercase">Тековна тежина</p>
-        <p class="text-2xl font-bold mt-1">{{ number_format($user->currentWeight(), 1) }} кг</p>
+        <p class="text-xl sm:text-2xl font-bold mt-1">{{ number_format($user->currentWeight(), 1) }} кг</p>
     </div>
-    <div class="card p-5">
+    <div class="card p-4 sm:p-5">
         <p class="text-gray-400 text-xs uppercase">Вкупно изгубено</p>
-        <p class="text-2xl font-bold mt-1 {{ $user->weightLost() >= 0 ? 'text-loss' : 'text-gain' }}">
-            {{ number_format($user->weightLost(), 1) }} кг ({{ number_format($user->percentLost(), 1) }}%)
+        <p class="text-xl sm:text-2xl font-bold mt-1 {{ $user->weightLost() >= 0 ? 'text-loss' : 'text-gain' }}">
+            {{ number_format($user->weightLost(), 1) }} кг
+            <span class="text-sm font-normal">({{ number_format($user->percentLost(), 1) }}%)</span>
         </p>
     </div>
-    <div class="card p-5">
+    <div class="card p-4 sm:p-5">
         <p class="text-gray-400 text-xs uppercase">Ранг</p>
-        <p class="text-2xl font-bold mt-1 text-gold">#{{ $rank }} / {{ $totalParticipants }}</p>
+        <p class="text-xl sm:text-2xl font-bold mt-1 text-gold">#{{ $rank }} / {{ $totalParticipants }}</p>
     </div>
 </div>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 md:mb-8">
     <div class="card p-5 md:col-span-2">
         <p class="text-gray-400 text-xs uppercase mb-3">Напредок на тежината</p>
         <canvas id="weightChart" height="120"></canvas>
@@ -48,7 +51,7 @@
     <div class="card p-5 flex flex-col items-center justify-center">
         <p class="text-gray-400 text-xs uppercase mb-3 self-start">Последна фотографија</p>
         @if($latestPhoto)
-            <img src="{{ Storage::url($latestPhoto) }}" class="rounded-xl max-h-48 object-cover">
+            <img src="{{ Storage::url($latestPhoto) }}" class="rounded-xl w-full max-h-48 object-cover">
         @else
             <p class="text-gray-500 text-sm">Сè уште нема фотографија</p>
         @endif
