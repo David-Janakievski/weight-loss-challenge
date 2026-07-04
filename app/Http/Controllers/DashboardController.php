@@ -24,6 +24,19 @@ class DashboardController extends Controller
         $chartLabels = $user->checkins->map(fn ($c) => 'Седмица ' . $c->week_number)->prepend('Почеток');
         $chartData = $user->checkins->map(fn ($c) => (float) $c->weight)->prepend((float) $user->starting_weight);
 
+        // Build day tiles: Day 1 ... today's day number
+        $challengeStart = \App\Support\Challenge::startDate();
+        $todayDay = max(1, (int) $challengeStart->startOfDay()->diffInDays(now()->startOfDay()) + 1);
+        $totalDays = max(1, (int) $challengeStart->startOfDay()->diffInDays(\App\Support\Challenge::endDate()->startOfDay()) + 1);
+        $daysToShow = min($todayDay, $totalDays);
+
+        // Count meals per day for the logged-in user
+        $mealCountsByDay = \App\Models\Meal::where('user_id', $user->id)
+            ->selectRaw("DATE(eaten_at) as meal_date, COUNT(*) as cnt")
+            ->groupBy('meal_date')
+            ->get()
+            ->keyBy(fn($r) => \Carbon\Carbon::parse($r->meal_date)->format('Y-m-d'));
+
         return view('dashboard.index', [
             'user' => $user,
             'rank' => $rank,
@@ -34,6 +47,9 @@ class DashboardController extends Controller
             'latestPhoto' => optional($user->latestCheckin())->photo ?? $user->starting_photo,
             'chartLabels' => $chartLabels,
             'chartData' => $chartData,
+            'daysToShow' => $daysToShow,
+            'challengeStart' => $challengeStart,
+            'mealCountsByDay' => $mealCountsByDay,
         ]);
     }
 }

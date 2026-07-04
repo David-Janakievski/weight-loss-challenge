@@ -6,6 +6,7 @@ use App\Http\Controllers\CheckinController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LeaderboardController;
 use App\Http\Controllers\OnboardingController;
+use App\Http\Controllers\MealController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -38,6 +39,14 @@ Route::middleware(['auth', 'onboarding.complete'])->group(function () {
     Route::get('/leaderboard', [LeaderboardController::class, 'index'])->name('leaderboard');
 
     Route::get('/profile/{user}', [ProfileController::class, 'show'])->name('profile.show');
+
+    // Meals diary
+    Route::get('/meals/day/{day}', [MealController::class, 'day'])->name('meals.day')->where('day', '[0-9]+');
+    Route::post('/meals', [MealController::class, 'store'])->name('meals.store');
+    Route::delete('/meals/{meal}', [MealController::class, 'destroy'])->name('meals.destroy');
+    Route::post('/meals/{meal}/comment', [MealController::class, 'comment'])->name('meals.comment');
+    Route::delete('/meal-comments/{comment}', [MealController::class, 'deleteComment'])->name('meals.comment.delete');
+
 });
 
 // Admin

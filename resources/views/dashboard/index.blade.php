@@ -58,9 +58,41 @@
     </div>
 </div>
 
+<div class="grid grid-cols-2 md:grid-cols-2 gap-4 mb-6 md:mb-8">
+    <div class="card p-5">
+        <p class="text-gray-400 text-xs uppercase mb-2">Денови до 1 август</p>
+        <p class="text-4xl font-bold text-gold">{{ $daysRemaining }}</p>
+    </div>
+    <div class="card p-5">
+        <p class="text-gray-400 text-xs uppercase mb-2">Ден на предизвикот</p>
+        <p class="text-4xl font-bold text-white">{{ $daysToShow }}</p>
+    </div>
+</div>
+
+{{-- Meal diary day tiles --}}
 <div class="card p-5">
-    <p class="text-gray-400 text-xs uppercase mb-2">Денови до 1 август</p>
-    <p class="text-4xl font-bold text-gold">{{ $daysRemaining }}</p>
+    <div class="flex items-center justify-between mb-4">
+        <p class="text-gray-400 text-xs uppercase">🍽️ Дневник на оброци</p>
+        <p class="text-xs text-gray-500">Кликни на ден за да ги видиш оброците</p>
+    </div>
+    <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-2">
+        @for($d = 1; $d <= $daysToShow; $d++)
+            @php
+                $dateKey = $challengeStart->copy()->addDays($d - 1)->format('Y-m-d');
+                $mealCount = $mealCountsByDay->get($dateKey)->cnt ?? 0;
+                $isToday = $dateKey === now()->format('Y-m-d');
+            @endphp
+            <a href="{{ route('meals.day', $d) }}"
+               class="flex flex-col items-center justify-center rounded-xl p-2 border transition hover:border-gold hover:bg-gold/5 {{ $isToday ? 'border-gold bg-gold/10' : 'border-border' }}">
+                <span class="text-xs font-bold {{ $isToday ? 'text-gold' : 'text-gray-300' }}">{{ $d }}</span>
+                @if($mealCount > 0)
+                    <span class="mt-1 text-[10px] bg-loss/20 text-loss rounded-full px-1.5 py-0.5 leading-none">{{ $mealCount }}</span>
+                @else
+                    <span class="mt-1 text-[10px] text-gray-600">—</span>
+                @endif
+            </a>
+        @endfor
+    </div>
 </div>
 
 <script>
