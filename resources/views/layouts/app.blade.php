@@ -46,7 +46,15 @@
     @auth
     <nav class="border-b border-border bg-card/60 backdrop-blur sticky top-0 z-40">
         <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="{{ route('dashboard') }}" class="font-bold text-lg text-gold shrink-0">🏆 Предизвик за слабеење</a>
+            <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 shrink-0 group">
+                <img src="{{ asset('images/logo.png') }}"
+                     alt="Слабеење Лето 2026"
+                     class="h-9 w-9 rounded-full object-cover ring-1 ring-border group-hover:ring-gold transition">
+                <span class="font-bold text-sm leading-tight text-white hidden sm:block">
+                    Слабеење Лето 2026<br>
+                    <span class="text-gold font-semibold text-xs tracking-wide">KADIDERE</span>
+                </span>
+            </a>
 
             {{-- Desktop nav --}}
             <div class="hidden md:flex items-center gap-4 text-sm">
