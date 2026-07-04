@@ -31,7 +31,7 @@
 
         @if ($biggestLoserOfWeek)
             <div class="mb-6 card p-5 border-gold/50 fade-in">
-                <p class="text-gold font-semibold">🔥 Највеќе кг изгубено за оваа недела </p>
+                <p class="text-gold font-semibold">🔥 Најмногу кг изгубено за оваа недела </p>
                 <p class="text-lg mt-1">{{ $biggestLoserOfWeek['user']->name }} —
                     {{ number_format($biggestLoserOfWeek['lost'], 1) }} кг оваа недела</p>
             </div>
