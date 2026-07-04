@@ -40,6 +40,23 @@
         <canvas id="weightChart" height="100"></canvas>
     </div>
 
+    {{-- Meals log --}}
+    <div class="mb-6 md:mb-8">
+        <p class="text-gray-400 text-xs uppercase mb-4">Дневник на оброци</p>
+        @if($meals->isEmpty())
+            <div class="card p-8 text-center text-gray-500">
+                <p class="text-2xl mb-2">🍽️</p>
+                <p>{{ $profileUser->name }} сè уште нема внесено оброци.</p>
+            </div>
+        @else
+            <div class="space-y-6">
+                @foreach($meals as $meal)
+                    @include('meals._meal_card', ['meal' => $meal, 'showDate' => true])
+                @endforeach
+            </div>
+        @endif
+    </div>
+
     {{-- Photo gallery --}}
     <div class="card p-5">
         <p class="text-gray-400 text-xs uppercase mb-4">Неделна галерија со фотографии</p>
@@ -198,6 +215,32 @@
                     },
                 }
             }
+        });
+    </script>
+
+    <script>
+        // Interactive star rating highlight (meal comments)
+        document.querySelectorAll('[id^="stars-"]').forEach(container => {
+            const labels = container.querySelectorAll('label');
+            const stars = container.querySelectorAll('.star-btn');
+            labels.forEach((label, idx) => {
+                label.addEventListener('mouseenter', () => {
+                    stars.forEach((s, i) => s.classList.toggle('text-gold', i <= idx));
+                    stars.forEach((s, i) => s.classList.toggle('text-gray-600', i > idx));
+                });
+                label.addEventListener('click', () => {
+                    stars.forEach((s, i) => s.classList.toggle('text-gold', i <= idx));
+                    stars.forEach((s, i) => s.classList.toggle('text-gray-600', i > idx));
+                });
+            });
+            container.addEventListener('mouseleave', () => {
+                const checked = container.querySelector('input[type=radio]:checked');
+                const val = checked ? parseInt(checked.value) : 0;
+                stars.forEach((s, i) => {
+                    s.classList.toggle('text-gold', i < val);
+                    s.classList.toggle('text-gray-600', i >= val);
+                });
+            });
         });
     </script>
 @endsection

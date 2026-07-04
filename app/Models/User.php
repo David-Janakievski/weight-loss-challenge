@@ -41,6 +41,11 @@ class User extends Authenticatable
         return $this->hasMany(Checkin::class)->orderBy('week_number');
     }
 
+    public function meals(): HasMany
+    {
+        return $this->hasMany(Meal::class);
+    }
+
     public function latestCheckin()
     {
         return $this->checkins()->latest('week_number')->first();

@@ -13,10 +13,16 @@ class ProfileController extends Controller
         $chartLabels = $user->checkins->map(fn ($c) => 'Седмица ' . $c->week_number)->prepend('Почеток');
         $chartData = $user->checkins->map(fn ($c) => (float) $c->weight)->prepend((float) $user->starting_weight);
 
+        $meals = $user->meals()
+            ->with('comments.user')
+            ->orderByDesc('eaten_at')
+            ->get();
+
         return view('profile.show', [
             'profileUser' => $user,
             'chartLabels' => $chartLabels,
             'chartData' => $chartData,
+            'meals' => $meals,
         ]);
     }
 }
