@@ -73,3 +73,4 @@ class User extends Authenticatable
         return $this->checkins()->where('week_number', $weekNumber)->exists();
     }
 }
+// (append this method inside the User class manually)
