@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $user = Auth::user()->load('checkins');
+        $user = \App\Models\User::with('checkins')->find(Auth::id());
 
         $allUsers = User::where('onboarding_completed', true)->get();
         $ranked = $allUsers->sortByDesc(fn ($u) => [$u->weightLost(), $u->percentLost()])->values();

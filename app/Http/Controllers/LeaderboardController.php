@@ -9,7 +9,7 @@ class LeaderboardController extends Controller
 {
     public function index()
     {
-        $users = User::where('onboarding_completed', true)->where('is_admin', false)->get();
+        $users = User::where('onboarding_completed', true)->where('is_admin', false)->with('checkins')->get();
 
         $ranked = $users->sortByDesc(fn ($u) => [$u->weightLost(), $u->percentLost()])->values();
 
@@ -20,6 +20,7 @@ class LeaderboardController extends Controller
         $weekNumber = Challenge::currentWeekNumber();
         $biggestLoserOfWeek = User::where('onboarding_completed', true)
             ->where('is_admin', false)
+            ->with('checkins')
             ->get()
             ->map(function ($u) use ($weekNumber) {
                 $checkin = $u->checkins->firstWhere('week_number', $weekNumber);
