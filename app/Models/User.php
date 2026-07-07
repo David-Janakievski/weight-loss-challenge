@@ -48,7 +48,11 @@ class User extends Authenticatable
 
     public function latestCheckin()
     {
-        return $this->checkins()->latest('week_number')->first();
+        // checkins() already applies orderBy('week_number') ascending for chart
+        // display elsewhere, so we must clear that with reorder() before sorting
+        // descending here — otherwise the two ORDER BY clauses conflict and the
+        // ascending one wins, silently returning the *earliest* checkin instead.
+        return $this->checkins()->reorder('week_number', 'desc')->first();
     }
 
     public function currentWeight(): float
